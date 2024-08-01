@@ -1,5 +1,6 @@
 name: updateec2
 on:
+  push
   workflow_dispatch:
 jobs:
   Deploy:
@@ -16,6 +17,7 @@ jobs:
             USER_NAME: ubuntu
       
         run: |
+          echo $USER
           echo $PRIVATE_KEY  | tee private_key.pem
           chmod 600 private_key.pem
           cat private_key.pem
