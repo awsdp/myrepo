@@ -20,3 +20,4 @@ jobs:
           sudo echo $PRIVATE_KEY  | tee private_key.pem
           sudo chmod 600 private_key.pem
           cat private_key.pem
+          ls -lrtha
