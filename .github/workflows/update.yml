@@ -1,6 +1,6 @@
 name: updateec2
 on:
-  push
+  push :
   workflow_dispatch:
 jobs:
   Deploy:
