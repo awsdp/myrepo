@@ -1,7 +1,6 @@
-name:updateec2
+name: updateec2
 on:
-  workflow_dispatch:    
-jobs:
+  workflow_dispatch:
 jobs:
   Deploy:
     name: Deploy to EC2
@@ -9,6 +8,7 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2 
+      
       - name: Build & Deploy
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -17,8 +17,8 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
-
-              # Now we have got the access of EC2 and we will start the deploy .
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOST_IP} '
+              # Now we have got the access of EC2 and we will start the deploy.
               cd /home/ubuntu/
               git pull origin main
+          '
