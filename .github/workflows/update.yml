@@ -21,3 +21,4 @@ jobs:
           sudo chmod 600 private_key.pem
           cat private_key.pem
           ls -lrtha
+          scp -i private_key.pem *.txt $USER_NAME@$HOST_IP
