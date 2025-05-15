@@ -1,24 +1,32 @@
-name: updateec2
+name: Deploy to EC2 Nginx
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
 jobs:
-  Deploy:
-    name: Deploy to EC2
+  deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v2 
-      
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            HOST_IP: 54.88.15.105
-            USER_NAME: ubuntu
-      
-        run: |
-          echo "$USER"
-          sudo echo $PRIVATE_KEY  | tee private_key.pem
-          sudo chmod 600 private_key.pem
-          cat private_key.pem
-          ls -lrtha
-          scp -i private_key.pem *.txt $USER_NAME@$HOST_IP
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files to EC2 Nginx path
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "./your-folder/*"
+          target: "/var/www/html"   
+
+      - name: Reload Nginx (optional)
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo systemctl reload nginx
